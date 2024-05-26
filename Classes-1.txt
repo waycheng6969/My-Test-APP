@@ -1,0 +1,88 @@
+open class SmartDevice (val name: String, val category: String) {
+    var deviceStatus = "online"
+    var deviceConnectStatus: String = "unknow"
+    var devicePowerStatus = "off"
+    
+    constructor(name: String, category: String, statusCode: Int) : this(name, category) {
+        deviceStatus = when (statusCode) {
+            0 -> "offline"
+            1 -> "online"
+            else -> "unknown"
+        }
+    }
+   
+    fun turnOn() {
+        devicePowerStatus = "ON"
+    }
+    fun turnOff() {
+        devicePowerStatus = "OFF"
+    }
+    fun onlineSwitch(): String {
+        if (deviceConnectStatus == "online") {
+            deviceConnectStatus = "offline"
+        } else if (deviceConnectStatus == "offline") {
+            deviceConnectStatus = "online"
+        } else {
+            deviceConnectStatus = "online"
+        }
+        return deviceConnectStatus
+    }   
+
+}
+
+class SmartTvDevice(deviceName: String, deviceCategory: String) :
+    SmartDevice(name = deviceName, category = deviceCategory) {
+
+    var speakerVolume = 2
+        set(value) {
+            if (value in 0..100) {
+                field = value
+            }
+        }
+
+    var channelNumber = 1
+        set(value) {
+            if (value in 0..200) {
+                field = value
+            }
+        }
+    
+    fun increaseSpeakerVolume() {
+        speakerVolume++
+        println("Speaker volume increased to $speakerVolume.")
+    }
+
+    fun nextChannel() {
+        channelNumber++
+        println("Channel number increased to $channelNumber.")
+    }
+}
+
+class SmartLightDevice(deviceName: String, deviceCategory: String) :
+    SmartDevice(name = deviceName, category = deviceCategory) {
+
+    var brightnessLevel = 0
+        set(value) {
+            if (value in 0..100) {
+                field = value
+            }
+        }
+
+    fun increaseBrightness() {
+        brightnessLevel++
+        println("Brightness increased to $brightnessLevel.")
+    }
+}
+
+fun main() {
+    val myTv = SmartTvDevice(deviceName = "Android TV", deviceCategory = "Entertainment")
+
+    println("Device Name/Category: ${myTv.name} / ${myTv.category}")
+    println("       ConnectStatus: ${myTv.deviceConnectStatus}") //with { and }
+    myTv.onlineSwitch() //must with ( and ) 
+    println("       ConnectStatus: ${myTv.deviceConnectStatus}")
+    myTv.turnOn()
+    println("Smart device is turned ${myTv.devicePowerStatus}.")
+    myTv.turnOff()
+    println("Smart device is turned ${myTv.devicePowerStatus}.")
+}
